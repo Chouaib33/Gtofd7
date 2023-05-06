@@ -1,0 +1,27 @@
+-- تعريف المتغيرات
+local TargetFruit = "Banana" -- اسم الفاكهة المستهدفة
+local TargetDistance = 30 -- المسافة المسموح بها بين اللاعب والفاكهة
+local KillAll = true -- قتل جميع اللاعبين الذين يظهرون أمام اللاعب الآلي أو لا
+
+-- دالة البحث عن الفاكهة المستهدفة
+function findTargetFruit()
+    for i,v in pairs(game:GetService("Workspace").Fruits:GetChildren()) do
+        if v:IsA("MeshPart") and v.Name == TargetFruit then
+            local mag = (v.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+            if mag <= TargetDistance then
+                return v
+            end
+        end
+    end
+    return nil
+end
+
+-- دالة القتل
+function killPlayers()
+    for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+        if v.Character and v.Character.HumanoidRootPart then
+            local mag = (v.Character.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+            if mag <= 10 then
+                game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -10)
+                wait(0.2)
+                game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame * CFrame.new(0,
